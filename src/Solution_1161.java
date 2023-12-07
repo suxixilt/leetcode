@@ -20,34 +20,22 @@
  * -105 <= Node.val <= 105
  */
 
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- * int val;
- * TreeNode left;
- * TreeNode right;
- * TreeNode() {}
- * TreeNode(int val) { this.val = val; }
- * TreeNode(int val, TreeNode left, TreeNode right) {
- * this.val = val;
- * this.left = left;
- * this.right = right;
- * }
- * }
- */
+import java.util.ArrayDeque;
+import java.util.Queue;
 
-class MyTreeNode {
+class TreeNode {
     int val;
-    MyTreeNode left;
-    MyTreeNode right;
+    TreeNode left;
+    TreeNode right;
 
-    MyTreeNode() {
+    TreeNode() {
     }
-    MyTreeNode(int val) {
+
+    TreeNode(int val) {
         this.val = val;
     }
 
-    MyTreeNode(int val, MyTreeNode left, MyTreeNode right) {
+    TreeNode(int val, TreeNode left, TreeNode right) {
         this.val = val;
         this.left = left;
         this.right = right;
@@ -55,12 +43,49 @@ class MyTreeNode {
 }
 
 public class Solution_1161 {
-    public int maxLevelSum(MyTreeNode root) {
 
-        return 0;
+    public static void main(String[] args) {
+//        [-100,-200,-300,-20,-5,-10,null]
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(1);
+        root.right = new TreeNode(0);
+        root.left.left = new TreeNode(7);
+        root.left.right = new TreeNode(-8);
+        root.right.left = new TreeNode(-7);
+        root.right.right = new TreeNode(9);
+        System.out.println(new Solution_1161().maxLevelSum(root));
     }
 
-
+    public int maxLevelSum(TreeNode root) {
+        int total = root.val;
+        int floor = 1;
+        int temp; // 当前层总和
+        int cur = 1; // 当前层数
+        TreeNode m;
+        Queue<TreeNode> q1 = new ArrayDeque<TreeNode>();
+        q1.add(root);
+        while (!q1.isEmpty()) {
+            temp = 0;
+            int n = q1.size();
+            for (int i = 0; i < n; i++) {
+                m = q1.poll();
+                temp += m.val;
+                if (m.left != null) {
+                    q1.add(m.left);
+                }
+                if (m.right != null) {
+                    q1.add(m.right);
+                }
+            }
+            if (temp > total) {
+                total = temp;
+                floor = cur;
+            }
+            if (temp == total) {
+                floor = Math.min(floor, cur);
+            }
+            cur++;
+        }
+        return floor;
+    }
 }
-
-
